@@ -7,7 +7,15 @@ public class CalcDeg : MonoBehaviour
 {
     [SerializeField] private GameObject bar;
     [SerializeField] private GameObject controlBar;
-    private (double deg, float angle) CalcDegree()
+    private float degree = 0;
+    private float angle = 0;
+    private void Start()
+    {
+        var (deg, ang) = CalcDegree();
+        degree = deg;
+        angle = ang;
+    }
+    private (float deg, float angle) CalcDegree()
     {
         //공식 계산
         float a = Vector3.Distance(bar.transform.position, controlBar.transform.position);
@@ -22,9 +30,9 @@ public class CalcDeg : MonoBehaviour
         controlBarDist.x = 0; controlBarDist.y = 0;
         controlBar2Center.x = 0; controlBar2Center.y = 0;
 
-        float b = Vector3.Distance(controlBar.transform.position, controlBar2Center);
+        float b = Vector3.Distance(controlBarDist, controlBar2Center);
         b = (float)Math.Round(b, 2);
-        float c = Vector3.Distance(bar.transform.position, controlBar2Center);
+        float c = Vector3.Distance(barDist, bar2Center);
         c = (float)Math.Round(c, 2);
 
         //코사인 법칙에 의해
@@ -32,26 +40,28 @@ public class CalcDeg : MonoBehaviour
         cosTheta = (float)Math.Round(cosTheta, 2);
 
         //Theta값 산출
-
         float theta = 1 / Mathf.Cos(cosTheta);
-        Debug.Log(Mathf.Cos((float)cosTheta));
+        float kkk = (Mathf.Cos((float)cosTheta));
         theta = (float)Math.Round(theta, 2);
         if (float.IsNaN(theta))
         {
             theta = 0;
         }
-
-        return (Mathf.Abs(theta * Mathf.Rad2Deg), 0);
+        return (theta * Mathf.Rad2Deg, 0);
     }
     private void Update()
     {
-        var (deg, ang) = CalcDegree();
-        while (ang < deg)
+        if (angle < degree)
         {
             controlBar.transform.RotateAround(controlBar.transform.GetChild(0).position,
-               new Vector3(1, 0, 0), (float)(Time.deltaTime * deg * 0.1f));
-            ang += (float)(Time.deltaTime * deg * 0.1f);
+                new Vector3(1, 0, 0), (Time.deltaTime * degree * 0.1f));
+            angle += (Time.deltaTime * degree * 0.1f);
         }
-
+        else
+        {
+            var (deg, ang) = CalcDegree();
+            degree = deg;
+            angle = ang;
+        }
     }
 }
