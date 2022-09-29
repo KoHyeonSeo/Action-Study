@@ -15,10 +15,11 @@ public class Affine : MonoBehaviour
     }
 
     public ChooseAxis axis;
+    public bool case1 = false;
+    public bool case2 = false;
 
     private void Update()
     {
-        //뭐가 되었든 중심점 회전 
         if (axis.x == true)
         {
             Vector3 pos = transform.localPosition;
@@ -30,7 +31,7 @@ public class Affine : MonoBehaviour
             transform.localPosition = rot;
             print(rot);
         }
-        if(axis.y == true)
+        if (axis.y == true)
         {
             Vector3 pos = transform.localPosition;
             //y축 중심 회전 이동
@@ -46,7 +47,7 @@ public class Affine : MonoBehaviour
             Vector3 pos = transform.localPosition;
             //z축에서 회전 이동
             Vector3 rot = new Vector3(pos.x * Mathf.Cos(angle) - pos.y * Mathf.Sin(angle),
-                pos.x * Mathf.Sin(angle) + pos.z * Mathf.Cos(angle),
+                pos.x * Mathf.Sin(angle) + pos.y * Mathf.Cos(angle),
                 pos.z);
             //transform.LookAt(rot);
             transform.localPosition = rot;
